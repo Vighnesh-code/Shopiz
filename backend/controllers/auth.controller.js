@@ -24,15 +24,21 @@ export const signup = async (req, res) => {
       password: hashedPassword,
     });
 
-    const newUser = await user.save();
+    await user.save();
 
-    const { accessToken, refreshToken } = genToken(newUser._id, res);
+    const { accessToken, refreshToken } = genToken(user._id, res);
     setCookies(accessToken, refreshToken, res);
 
     res.status(201).json({
       success: true,
       message: "Account Created Successfully",
-      user: newUser,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
     });
   } catch (error) {
     console.log(`Error in signup Controller: ${error.message}`);
@@ -42,7 +48,33 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    res.send("Hey from login Page");
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Please, Provide all the credentials!",
+      });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ error: "User Not Found!" });
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return res.status(400).json({ message: "Invalid Credentials!" });
+    }
+    const { accessToken, refreshToken } = genToken(user._id);
+    setCookies(accessToken, refreshToken, res);
+    res.status(200).json({
+      success: true,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    });
   } catch (error) {
     console.log(`Error in login Controller: ${error.message}`);
   }
