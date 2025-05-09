@@ -3,6 +3,8 @@ import { User } from "../models/user.model.js";
 import { genToken } from "../utils/genToken.js";
 import { setCookies } from "../utils/setCookie.js";
 import { storeRefreshToken } from "../utils/storeRefreshToken.js";
+import jwt from "jsonwebtoken";
+import { redis } from "../lib/redis.js";
 
 export const signup = async (req, res) => {
   try {
@@ -86,7 +88,18 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.send("Hey from logout Page");
+    const refreshToken = req.cookies.refreshToken;
+    if (refreshToken) {
+      const decoded = jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+      );
+      await redis.del(`refreshToken: ${decoded.userId}`);
+    }
+
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    res.json({ success: true, message: "Logged Out Successfully" });
   } catch (error) {
     console.log(`Error in logout Controller: ${error.message}`);
   }
