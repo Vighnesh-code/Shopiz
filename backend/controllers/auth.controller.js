@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { User } from "../models/user.model.js";
 import { genToken } from "../utils/genToken.js";
 import { setCookies } from "../utils/setCookie.js";
+import { storeRefreshToken } from "../utils/storeRefreshToken.js";
 
 export const signup = async (req, res) => {
   try {
@@ -28,6 +29,7 @@ export const signup = async (req, res) => {
 
     const { accessToken, refreshToken } = genToken(user._id, res);
     setCookies(accessToken, refreshToken, res);
+    await storeRefreshToken(refreshToken, userId);
 
     res.status(201).json({
       success: true,
@@ -65,6 +67,8 @@ export const login = async (req, res) => {
     }
     const { accessToken, refreshToken } = genToken(user._id);
     setCookies(accessToken, refreshToken, res);
+    await storeRefreshToken(refreshToken, user._id);
+
     res.status(200).json({
       success: true,
       user: {
