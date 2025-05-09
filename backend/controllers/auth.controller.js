@@ -136,3 +136,12 @@ export const refreshAccessToken = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error!" });
   }
 };
+
+export const getProfile = (req, res) => {
+  try {
+    res.json(req.user);
+  } catch (error) {
+    console.log(`Error in getProfile Controller: ${error.message}`);
+    res.status(500).json({ message: "Internal Server Error!" });
+  }
+};
