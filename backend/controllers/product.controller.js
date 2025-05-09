@@ -32,3 +32,16 @@ export const createProduct = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error!" });
   }
 };
+
+export const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find({});
+    if (!products)
+      return res.status(404).json({ message: "No Products Found!" });
+
+    res.status(200).json(products);
+  } catch (error) {
+    console.log(`Error in getAllProducts controller: ${error.message}`);
+    res.status(500).json({ message: "Internal Server Error!" });
+  }
+};
