@@ -23,10 +23,10 @@ const userSchema = new mongoose.Schema(
         type: Number,
         deafult: 1,
       },
-      // product: {
-      //   type: mongoose.Types.Schema.ObjectId,
-      //   ref: "Product",
-      // },
+      product: {
+        type: mongoose.Types.Schema.ObjectId,
+        ref: "Product",
+      },
     },
     role: {
       type: String,
