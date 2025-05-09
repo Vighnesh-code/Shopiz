@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
         deafult: 1,
       },
       product: {
-        type: mongoose.Types.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
       },
     },
