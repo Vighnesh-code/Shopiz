@@ -1,5 +1,6 @@
 import { Product } from "../models/product.model.js";
 import { redis } from "../lib/redis.js";
+import { updatedProductsCache } from "../utils/updateProductsCache.js";
 
 export const createProduct = async (req, res) => {
   try {
@@ -138,6 +139,7 @@ export const toggleFeaturedProduct = async (req, res) => {
 
     product.isFeatured = !product.isFeatured;
     const updatedProduct = await product.save();
+    await updatedProductsCache();
     res.json(updatedProduct);
   } catch (error) {
     console.log(`Error in toggleFeaturedProduct: ${error.message}`);
