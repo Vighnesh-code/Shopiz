@@ -5,6 +5,7 @@ import {
   deleteProduct,
   getAllProducts,
   getFeaturedProducts,
+  getProductsByCategory,
   getRecommededProducts,
 } from "../controllers/product.controller.js";
 
@@ -14,6 +15,7 @@ router.post("/create", protectRoute, createProduct);
 router.get("/", protectRoute, getAllProducts);
 router.get("/recommendations", protectRoute, getRecommededProducts);
 router.get("/featured", protectRoute, getFeaturedProducts);
+router.get("/category/:category", protectRoute, getProductsByCategory);
 router.delete("/:id", protectRoute, deleteProduct);
 
 export default router;
