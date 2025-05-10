@@ -128,3 +128,19 @@ export const getProductsByCategory = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const toggleFeaturedProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (!product)
+      return res.status(404).json({ message: "No Products Found!" });
+
+    product.isFeatured = !product.isFeatured;
+    const updatedProduct = await product.save();
+    res.json(updatedProduct);
+  } catch (error) {
+    console.log(`Error in toggleFeaturedProduct: ${error.message}`);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
