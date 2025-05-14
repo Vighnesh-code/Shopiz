@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
+import { useUserStore } from "../stores/useUserStore";
 
 const Navbar = () => {
   const user = true;
   const isAdmin = true;
   const cart = [1, 2, 3, 4, 5, 6, 7];
 
-  function logout() {
-    return console.log("Logout Function Clicked!");
+  const { logout, loading } = useUserStore();
+
+  function handleLogout() {
+    logout();
   }
 
   return (
@@ -60,10 +63,12 @@ const Navbar = () => {
             <button
               className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 
 						rounded-md flex items-center transition duration-300 ease-in-out"
-              onClick={logout}
+              onClick={handleLogout}
             >
               <LogOut size={18} />
-              <span className="hidden sm:inline ml-2">Log Out</span>
+              <span className="hidden sm:inline ml-2">
+                {loading ? "Logging Out..." : "LogOut"}
+              </span>
             </button>
           ) : (
             <>
