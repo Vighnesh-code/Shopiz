@@ -29,7 +29,7 @@ export const createProduct = async (req, res) => {
     });
 
     await product.save();
-    res.status(201).json({ success: true, product });
+    res.status(201).json(product);
   } catch (error) {
     console.log(`Error in createProduct Controller: ${error.message}`);
     res.status(500).json({ message: "Internal Server Error!" });
