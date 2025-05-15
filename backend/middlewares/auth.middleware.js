@@ -3,7 +3,7 @@ import { User } from "../models/user.model.js";
 
 export const protectRoute = async (req, res, next) => {
   try {
-    const token = req.cookies.accessToken;
+    const token = req.cookies?.accessToken;
     if (!token) return res.status(400).json({ message: "No Token Provided!" });
 
     const decoded = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);

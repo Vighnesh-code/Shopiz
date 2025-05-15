@@ -26,7 +26,7 @@ export const useUserStore = create((set) => ({
     set({ loading: true });
     try {
       const res = await axios.post("/auth/login", { email, password });
-      set({ user: res.data, loading: false });
+      set({ user: res.data?.user, loading: false });
       toast.success("Logged In Successfully!");
     } catch (error) {
       set({ loading: false });
@@ -47,7 +47,7 @@ export const useUserStore = create((set) => ({
   checkAuth: async () => {
     set({ checkingAuth: true });
     try {
-      const response = await axios.get("/auth/profile");
+      const response = await axios.get("/auth/get-me");
       set({ user: response.data, checkingAuth: false });
     } catch (error) {
       console.log(error.message);
