@@ -1,4 +1,5 @@
 import { Product } from "../models/product.model.js";
+import cloudinary from "../lib/cloudinary.js";
 import { redis } from "../lib/redis.js";
 import { updatedProductsCache } from "../utils/updateProductsCache.js";
 
