@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import { useProductStore } from "../stores/useProductStore";
 import { Star, Trash } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ProductsList = () => {
-  const { products, fetchAllProducts } = useProductStore();
+  const { products, fetchAllProducts, deleteProduct } = useProductStore();
+  const [deletingProductId, setDeletingProductId] = useState(null);
 
   useEffect(() => {
     fetchAllProducts();
@@ -14,8 +15,10 @@ const ProductsList = () => {
     console.log(`ProductId: ${productId}`);
   };
 
-  const deleteProduct = (productId) => {
-    console.log(`ProductId: ${productId}`);
+  const handleDeletion = async (productId) => {
+    setDeletingProductId(productId);
+    await deleteProduct(productId);
+    setDeletingProductId(null);
   };
 
   return (
@@ -107,10 +110,14 @@ const ProductsList = () => {
 
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button
-                  onClick={() => deleteProduct(product._id)}
+                  onClick={() => handleDeletion(product._id)}
                   className="text-red-400 hover:text-red-300"
                 >
-                  <Trash className="h-5 w-5" />
+                  {deletingProductId === product._id ? (
+                    "Deleting..."
+                  ) : (
+                    <Trash className="h-5 w-5" />
+                  )}
                 </button>
               </td>
             </tr>

@@ -30,4 +30,20 @@ export const useProductStore = create((set) => ({
       toast.error(error.response.data.error || "Failed to fetch products");
     }
   },
+  deleteProduct: async (productId) => {
+    set({ loading: true });
+    try {
+      await axios.delete(`/products/${productId}`);
+      set((prevProducts) => ({
+        products: prevProducts.products.filter(
+          (product) => product._id !== productId
+        ),
+        loading: false,
+      }));
+      toast.success("Product Deleted Successfully!");
+    } catch (error) {
+      set({ loading: false });
+      toast.error(error.response.data.error || "Failed to Delete the product");
+    }
+  },
 }));
