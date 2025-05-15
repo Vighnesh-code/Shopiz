@@ -4,15 +4,19 @@ import { Star, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const ProductsList = () => {
-  const { products, fetchAllProducts, deleteProduct } = useProductStore();
+  const { products, fetchAllProducts, deleteProduct, toggleFeaturedProduct } =
+    useProductStore();
   const [deletingProductId, setDeletingProductId] = useState(null);
+  const [isTogglingProductId, setIsTogglingProductId] = useState(null);
 
   useEffect(() => {
     fetchAllProducts();
   }, [fetchAllProducts]);
 
-  const toggleFeaturedProduct = (productId) => {
-    console.log(`ProductId: ${productId}`);
+  const handleFeaturedUpdate = async (productId) => {
+    setIsTogglingProductId(productId);
+    await toggleFeaturedProduct(productId);
+    setIsTogglingProductId(null);
   };
 
   const handleDeletion = async (productId) => {
@@ -97,14 +101,18 @@ const ProductsList = () => {
 
               <td className="px-6 py-4 whitespace-nowrap">
                 <button
-                  onClick={() => toggleFeaturedProduct(product._id)}
+                  onClick={() => handleFeaturedUpdate(product._id)}
                   className={`p-1 rounded-full ${
                     product.isFeatured
                       ? "bg-yellow-400 text-gray-900"
                       : "bg-gray-600 text-gray-300"
                   } hover:bg-yellow-500 transition-colors duration-200`}
                 >
-                  <Star className="h-5 w-5" />
+                  {isTogglingProductId === product._id ? (
+                    "Updating..."
+                  ) : (
+                    <Star className="h-5 w-5" />
+                  )}
                 </button>
               </td>
 
