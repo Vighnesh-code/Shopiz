@@ -3,6 +3,7 @@ import { useCartStore } from "../stores/useCartStore";
 import { EmptyCartUI } from "../components/EmptyCartUI";
 import { useEffect } from "react";
 import CartItem from "../components/CartItem";
+import PeopleAlsoBought from "../components/PeopleAlsoBought";
 
 const CartPage = () => {
   const { cart, getCartItems } = useCartStore();
@@ -32,6 +33,7 @@ const CartPage = () => {
                 ))}
               </div>
             )}
+            {cart.length > 0 && <PeopleAlsoBought />}
           </motion.div>
         </div>
       </div>
