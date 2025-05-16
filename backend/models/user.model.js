@@ -18,16 +18,18 @@ const userSchema = new mongoose.Schema(
       required: true,
       minLength: [6, "Password must be atleast 6 characters long!"],
     },
-    cartItems: {
-      quantity: {
-        type: Number,
-        deafult: 1,
+    cartItems: [
+      {
+        quantity: {
+          type: Number,
+          deafult: 1,
+        },
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
       },
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    },
+    ],
     role: {
       type: String,
       enum: ["customer", "admin"],
