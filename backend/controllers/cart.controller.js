@@ -15,7 +15,7 @@ export const addToCart = async (req, res) => {
     await user.save();
     res.json(user.cartItems);
   } catch (error) {
-    console.log(`Error in addToCart: ${error.message}`);
+    console.log(`Error in addToCart controller: ${error.message}`);
     res.status(500).json({ message: "Internal Server Error!" });
   }
 };

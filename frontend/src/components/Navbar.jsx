@@ -6,7 +6,7 @@ import LoadingSpinner from "./LoadingSpinner";
 const Navbar = () => {
   const { user, logout, loading } = useUserStore();
   const isAdmin = user?.role === "admin";
-  const cart = [1, 2, 3, 4, 5, 6, 7];
+  const cart = [1, 2, 3, 4];
 
   function handleLogout() {
     logout();
