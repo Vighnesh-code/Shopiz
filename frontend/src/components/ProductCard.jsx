@@ -13,7 +13,6 @@ const ProductCard = ({ product }) => {
       toast.error("Please login to add products to cart", { id: "login" });
       return;
     } else {
-      // TODO: Add to cart functionality comes here.
       addToCart(product);
     }
   };
