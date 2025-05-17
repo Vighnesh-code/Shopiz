@@ -2,11 +2,12 @@ import { Link } from "react-router-dom";
 import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
 import { useUserStore } from "../stores/useUserStore";
 import LoadingSpinner from "./LoadingSpinner";
+import { useCartStore } from "../stores/useCartStore";
 
 const Navbar = () => {
   const { user, logout, loading } = useUserStore();
   const isAdmin = user?.role === "admin";
-  const cart = [1, 2, 3, 4];
+  const { cart } = useCartStore();
 
   function handleLogout() {
     logout();
