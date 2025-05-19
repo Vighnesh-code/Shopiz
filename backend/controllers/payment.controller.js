@@ -41,39 +41,40 @@ export const createCheckoutSession = async (req, res) => {
           (totalAmount * coupon.discountPercentage) / 100
         );
       }
-
-      // stripe session functionality comes here
-      const session = await stripe.checkout.session.create({
-        payment_method_types: ["card"],
-        line_items: lineItems,
-        mode: "payment",
-        success_url: `${process.env.CLIENT_URL}/purchase-success?session-id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
-        discounts: coupon
-          ? [
-              {
-                coupon: await createStripeCoupon(coupon.discountPercentage),
-              },
-            ]
-          : [],
-        metadata: {
-          userId: req.user._id.toString(),
-          couponCode: couponCode || "",
-          products: JSON.stringify(
-            products.map((p) => ({
-              id: p._id,
-              quantity: p.quantity,
-              price: p.price,
-            }))
-          ),
-        },
-      });
-
-      if (totalAmount >= 20000) {
-        await createNewCoupon(req.user._id);
-      }
-      res.status(200).json({ id: session.id, totalAmount: totalAmount / 100 });
     }
+    // stripe session functionality comes here
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: lineItems,
+      mode: "payment",
+      success_url: `${process.env.CLIENT_URL}/purchase-success?session-id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
+      discounts: coupon
+        ? [
+            {
+              coupon: await createStripeCoupon(coupon.discountPercentage),
+            },
+          ]
+        : [],
+      metadata: {
+        userId: req.user._id.toString(),
+        couponCode: couponCode || "",
+        products: JSON.stringify(
+          products.map((p) => ({
+            id: p._id,
+            quantity: p.quantity,
+            price: p.price,
+          }))
+        ),
+      },
+    });
+
+    if (totalAmount >= 20000) {
+      await createNewCoupon(req.user._id);
+    }
+    res
+      .status(200)
+      .json({ session: { id: session?.id }, totalAmount: totalAmount / 100 });
   } catch (error) {
     console.log(`Error in createCheckoutSession controller: ${error.message}`);
     res.status(500).json({ message: "Internal Server Error" });
